@@ -1,0 +1,61 @@
+{
+  "name": "@coconut-xr/koestlich",
+  "version": "0.0.0",
+  "homepage": "https://coconut-xr.github.io/koestlich",
+  "license": "SEE LICENSE IN LICENSE",
+  "description": "user interfaces for Three.js",
+  "author": "Bela Bohlender",
+  "keywords": [
+    "r3f",
+    "three.js",
+    "userinterface",
+    "react",
+    "flexbox",
+    "yoga",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:coconut-xr/koestlich.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "check": "run-s check:prettier check:eslint",
+    "check:prettier": "prettier --check src/**/*.{ts,tsx}",
+    "check:eslint": "eslint src",
+    "fix": "run-s fix:prettier fix:eslint",
+    "fix:prettier": "prettier --write src/**/*.{ts,tsx}",
+    "fix:eslint": "eslint src --fix"
+  },
+  "devDependencies": {
+    "@react-three/fiber": "^8.11.5",
+    "@types/react": "^18.0.28",
+    "@types/three": "^0.147.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.4",
+    "react": "^18.2.0",
+    "three": "^0.147.0",
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "@react-three/fiber": "*",
+    "react": "*",
+    "three": ">=0.140.0"
+  },
+  "dependencies": {
+    "@coconut-xr/glyph": "^0.0.1",
+    "@coconut-xr/flex": "^3.0.2"
+  }
+}
