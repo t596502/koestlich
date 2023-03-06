@@ -31,12 +31,12 @@ export function buildComponent<
         index?: number;
         id?: string;
         children?: C;
-        classes?: Array<Partial<PropertiesFromAPI<P, A>>>;
+        classes?: Array<Partial<P & PropertiesFromAPI<P, A>>>;
         ref?: MutableRefObject<T | undefined>;
       }
   >(({ id, index, children, classes, ...props }, ref) => {
     const defaultProperties = useDefaultStyles();
-    const properties = translateProperties(
+    const properties = translateProperties<P, A>(
       api,
       props as any,
       defaultProperties ?? {},

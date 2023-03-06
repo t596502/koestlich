@@ -87,7 +87,7 @@ export function flag<K extends string, V>(
 
 export function translateProperties<P extends YogaProperties, A extends PropertyAPI>(
   api: A,
-  ...propertiesList: Array<Partial<PropertiesFromAPI<P, A>>>
+  ...propertiesList: Array<Partial<P & PropertiesFromAPI<P, A>>>
 ): P {
   const result = {} as P;
   for (const properties of propertiesList) {

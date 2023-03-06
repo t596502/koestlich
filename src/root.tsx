@@ -11,7 +11,12 @@ import { Bucket } from "./bucket.js";
 import { UseComponent } from "./component.js";
 import { BaseNode, NodeClass, useNode } from "./node.js";
 import { useFrame } from "@react-three/fiber";
-import { PropertiesFromAPI, PropertyAPI, translateProperties } from "./properties/index.js";
+import {
+  flexAPI,
+  PropertiesFromAPI,
+  PropertyAPI,
+  translateProperties,
+} from "./properties/index.js";
 import { YogaProperties } from "@coconut-xr/flex";
 import { Yoga } from "yoga-wasm-web";
 import { suspend } from "suspend-react";
@@ -39,14 +44,19 @@ export type RootStorage = {
 const storageContext = createContext<RootStorage>(null as any);
 const defaultStyleContext = createContext<any>(null as any);
 
-export function DefaultStyleProvider<A extends PropertyAPI>({
+export const useDefaultStyles = useContext.bind(null, defaultStyleContext);
+
+export function DefaultStyleProvider<P = YogaProperties, A extends PropertyAPI = typeof flexAPI>({
   children,
   ...props
-}: PropsWithChildren<PropertiesFromAPI<{ [Key in string]?: any }, A>>) {
-  return <defaultStyleContext.Provider value={props}>{children}</defaultStyleContext.Provider>;
+}: PropsWithChildren<PropertiesFromAPI<P, A>>) {
+  const existingDefaultSytles = useDefaultStyles();
+  const value = useMemo(
+    () => (existingDefaultSytles == null ? props : { ...props, ...existingDefaultSytles }),
+    [existingDefaultSytles, props],
+  );
+  return <defaultStyleContext.Provider value={value}>{children}</defaultStyleContext.Provider>;
 }
-
-export const useDefaultStyles = useContext.bind(null, defaultStyleContext);
 
 export const useRootStorage = () => useContext(storageContext);
 
@@ -65,7 +75,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
         precision?: number;
         id?: string;
         children?: C;
-        classes?: Array<Partial<PropertiesFromAPI<P, A>>>;
+        classes?: Array<Partial<P & PropertiesFromAPI<P, A>>>;
         loadYoga: () => Promise<Yoga>;
       }
   >(({ loadYoga, precision, id = "root", children, classes, ...props }, ref) => {
@@ -82,7 +92,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
       [precision, yoga],
     );
     const defaultProperties = useDefaultStyles();
-    const properties = translateProperties(
+    const properties = translateProperties<P, A>(
       api,
       props as any,
       defaultProperties ?? {},
