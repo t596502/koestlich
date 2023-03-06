@@ -87,25 +87,21 @@ export function flag<K extends string, V>(
 
 export function translateProperties<P extends YogaProperties, A extends PropertyAPI>(
   api: A,
-  props: P,
-  ...properties: Array<Partial<PropertiesFromAPI<P, A>>>
+  ...propertiesList: Array<Partial<PropertiesFromAPI<P, A>>>
 ): P {
-  const result = { ...props };
-  translate(result, api, props);
-  for (const p of properties) {
-    translate(result, api, p);
+  const result = {} as P;
+  for (const properties of propertiesList) {
+    for (const [key, value] of Object.entries(properties)) {
+      const apiEntry = api[key];
+      if (apiEntry == null) {
+        //no translation necassary just assign property to result:
+        result[key as keyof YogaProperties] = value as any;
+        continue;
+      }
+      api[key]?.(result, value, key);
+    }
   }
   return result;
-}
-
-function translate<P extends YogaProperties, A extends PropertyAPI>(
-  result: P,
-  api: A,
-  properties: Partial<PropertiesFromAPI<P, A>> | P,
-): void {
-  for (const [key, value] of Object.entries(properties)) {
-    api[key]?.(result, value, key);
-  }
 }
 
 export * from "./flex.js";

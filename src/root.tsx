@@ -84,7 +84,7 @@ export function buildRoot<T extends BaseNode, P extends YogaProperties, C, A ext
     const defaultProperties = useDefaultStyles();
     const properties = translateProperties(
       api,
-      props as unknown as P,
+      props as any,
       defaultProperties ?? {},
       ...(classes ?? []),
     );

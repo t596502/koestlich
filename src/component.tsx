@@ -38,7 +38,7 @@ export function buildComponent<
     const defaultProperties = useDefaultStyles();
     const properties = translateProperties(
       api,
-      props as any as P,
+      props as any,
       defaultProperties ?? {},
       ...(classes ?? []),
     );
